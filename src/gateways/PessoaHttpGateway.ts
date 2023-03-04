@@ -39,7 +39,7 @@ export default class PessoaHttpGateway implements PessoaGateway {
         );
     }
     
-    async remove(pessoa: Pessoa): Promise<void> {
+    async remover(pessoa: Pessoa): Promise<void> {
         await this.httpClient.delete(`${this.baseUrl}/pessoas/${pessoa.id}`)
     }
 }

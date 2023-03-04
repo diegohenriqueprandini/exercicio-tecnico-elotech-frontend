@@ -4,12 +4,23 @@ defineProps(
 );
 </script>
 
-<template>
+<template>    
+    <table>
+        <tr>
+            <td>Nome</td>
+            <td>Cpf</td>
+            <td>Data de Nascimento</td>
+            <td></td>
+        </tr>
+        <tr v-for="pessoa in pessoaList.items">
+            <td>{{ pessoa.nome }}</td>
+            <td>{{ pessoa.cpf }}</td>
+            <td>{{ pessoa.dataDeNascimento }}</td>
+            <td><button @click="pessoaList.removerPessoa(pessoa)">Remover</button></td>
+        </tr>
+    </table>
     <div v-if="pessoaList.items.length === 0">No items</div>
-    <div v-for="pessoa in pessoaList.items">
-        <span>{{ pessoa.id }} {{ pessoa.nome }} {{ pessoa.cpf }} {{ pessoa.dataDeNascimento }}</span>
-        <button @click="pessoaList.removeItem(pessoa)">Remove</button>
-    </div>
+    
 </template>
 
 <style scoped>
