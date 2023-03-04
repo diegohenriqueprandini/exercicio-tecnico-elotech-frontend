@@ -39,7 +39,11 @@ export default class PessoaHttpGateway implements PessoaGateway {
     }
     
     async alterar(pessoa: Pessoa): Promise<Pessoa> {
-        const response = await this.httpClient.put(`${this.baseUrl}/pessoas/${pessoa.id}`, pessoa)
+        const response = await this.httpClient.put(`${this.baseUrl}/pessoas/${pessoa.id}`, { 
+            nome: pessoa.nome,
+            cpf: pessoa.cpf,
+            dataDeNascimento: pessoa.dataDeNascimento
+         })
         const pessoaAlterada =  new Pessoa(
             response.id,
             response.nome,
@@ -66,5 +70,17 @@ export default class PessoaHttpGateway implements PessoaGateway {
             )
         });
         return contatos;
+    }
+
+    async adicionarContato(pessoa: Pessoa, contato: Contato): Promise<void> {
+        await this.httpClient.post(`${this.baseUrl}/pessoas/${pessoa.id}/contato`, contato)
+    }
+
+    async alterarContato(pessoa: Pessoa, contato: Contato): Promise<void> {
+        await this.httpClient.put(`${this.baseUrl}/pessoas/${pessoa.id}/contato`, contato)
+    }
+
+    async removerContato(pessoa: Pessoa, contato: Contato): Promise<void> {
+        await this.httpClient.delete(`${this.baseUrl}/pessoas/${pessoa.id}/contato/${contato.id}`)
     }
 }

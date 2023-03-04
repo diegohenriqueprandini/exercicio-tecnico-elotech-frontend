@@ -27,8 +27,7 @@ Criar uma API Rest de um cadastro de Pessoas, utilizando Spring Boot e Java
 * Publicar a aplicação na internet utilizando algum provedor, para que possa ser acessado sem necessidade de rodar o projeto local
 
 ### Itens Pendendes
-* crud de pessoa
-* crud e contatos
+* Falta ajustar a edição
 * Injetar properties (baseUrl backend)
 * listagem paginada
 * listagem filtro
@@ -40,3 +39,6 @@ Criar uma API Rest de um cadastro de Pessoas, utilizando Spring Boot e Java
 
 ### Subir local para desenvolvimento
 * yarn dev
+
+### URL Padrao
+http://localhost:5173/

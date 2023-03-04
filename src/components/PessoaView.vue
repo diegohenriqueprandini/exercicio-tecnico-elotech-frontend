@@ -24,11 +24,39 @@ onMounted(async () => {
 
     data.pessoaList.register("alterarPessoa", async (pessoa: Pessoa) => {
         await pessoaGateway.alterar(pessoa);
+        await carregar();
+    });
+
+    data.pessoaList.register("alterarPessoa", async (pessoa: Pessoa) => {
+        await pessoaGateway.alterar(pessoa);
+        await carregar();
     });
 
     data.pessoaList.register("removerPessoa", async (pessoa: Pessoa) => {
         await pessoaGateway.remover(pessoa);
-    });    
+        await carregar();
+    });
+    
+    data.pessoaList.register("adicionarContato", async (adicionarContato: any) => {
+        const pessoa = adicionarContato.pessoa;
+        const contato = adicionarContato.contato;
+        await pessoaGateway.adicionarContato(pessoa, contato);
+        await carregar();
+    });
+    
+    data.pessoaList.register("alterarContato", async (alterarContato: any) => {
+        const pessoa = alterarContato.pessoa;
+        const contato = alterarContato.contato;
+        await pessoaGateway.alterarContato(pessoa, contato);
+        await carregar();
+    });
+
+    data.pessoaList.register("removerContato", async (removerContato: any) => {
+        const pessoa = removerContato.pessoa;
+        const contato = removerContato.contato;
+        await pessoaGateway.removerContato(pessoa, contato);
+        await carregar();
+    }); 
 });
 
 </script>

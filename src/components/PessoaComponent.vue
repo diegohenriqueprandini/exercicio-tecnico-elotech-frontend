@@ -2,9 +2,12 @@
 import { ref } from 'vue';
 import Contato from '../entities/Contato';
 import Pessoa from '../entities/Pessoa';
+import PessoaList from '../entities/PessoaList';
 defineProps(
     ["pessoaList"]    
 );
+const isNovoPessoa = ref(true);
+const isNovoContato = ref(true);
 const pessoaEdit = ref(new Pessoa(null, "", "", ""));
 const contatoEdit = ref(new Contato(null, "", "", ""));
 
@@ -12,25 +15,56 @@ const arr: Contato[] = [];
 const contatosEdit = ref(arr);
 
 function cleanDataPessoa() {
+    isNovoPessoa.value = true;
     pessoaEdit.value = new Pessoa(null, "", "", "");
 }
 
 function cleanDataContato() {
+    isNovoContato.value = true;
     contatoEdit.value = new Contato(null, "", "", "");
 }
 
 function editarPessoa(pessoa: Pessoa) {
-    console.log(pessoa.contatos);
+    isNovoPessoa.value = false;
     pessoaEdit.value = pessoa;
     contatosEdit.value = pessoa.contatos;
 }
 
-function adicionarContato(contato: Contato) {
-    contatosEdit.value.push(contato);
+function editarContato(contato: Contato) {
+    isNovoContato.value = false;
+    contatoEdit.value = contato;
 }
 
-function removerContato(contato: Contato) {
-    contatosEdit.value.splice(contatosEdit.value.indexOf(contato), 1);
+function salvarPessoa(pessoaList: PessoaList, pessoa: Pessoa, contatos: Contato[], novoPessoa: boolean) {
+    if (novoPessoa) {
+        if (contatos.length < 1) return;
+        pessoaList.criarPessoa(pessoa, contatos);        
+    } else {
+        pessoaList.alterarPessoa(pessoa);
+    }
+    cleanDataPessoa();
+}
+
+function adicionarContato(pessoaList: PessoaList, pessoa: Pessoa, contato: Contato, novoPessoa: boolean, novoContato: boolean) {
+    if (novoPessoa) {
+        contatosEdit.value.push(contato);
+    } else {
+        if (novoContato) {
+            pessoaList.adicionarContato(pessoa, contato);
+        } else {
+            pessoaList.alterarContato(pessoa, contato); 
+        }
+    }
+    cleanDataContato();
+}
+
+function removerContato(pessoaList: PessoaList, pessoa: Pessoa, contato: Contato) {
+    if (isNovoPessoa) {
+        contatosEdit.value.splice(contatosEdit.value.indexOf(contato), 1);
+    } else {
+        pessoaList.removerContato(pessoa, contato);
+    }
+    cleanDataContato();
 }
 
 </script>
@@ -65,8 +99,11 @@ function removerContato(contato: Contato) {
     <div>
         <label>Data de Nascimento</label>
         <input type="text" v-model="pessoaEdit.dataDeNascimento" />
-    </div>    
-
+    </div>
+    <br>
+    <button @click="salvarPessoa(pessoaList, pessoaEdit, contatosEdit, isNovoPessoa)">{{ isNovoPessoa ? 'Adicionar Pessoa' : 'Salvar Pessoa' }}</button>  
+    <br><br>
+    <hr>
     <br>
     <label>Contatos</label>
     <div>
@@ -80,11 +117,11 @@ function removerContato(contato: Contato) {
     <div>
         <label>E-mail</label>
         <input type="text" v-model="contatoEdit.email" />
-    </div>    
-    <button @click="() => { adicionarContato(contatoEdit); cleanDataContato(); }">Adicionar Contato</button>  
-    
+    </div>
+    <br>
+    <button @click="adicionarContato(pessoaList, pessoaEdit, contatoEdit, isNovoPessoa, isNovoContato)">{{ isNovoContato ? 'Adicionar Contato' : 'Salvar Contato' }}</button>
     <br><br>
-    
+
     <table>
         <tr>
             <td>Nome</td>
@@ -96,12 +133,10 @@ function removerContato(contato: Contato) {
             <td>{{ contato.nome }}</td>
             <td>{{ contato.telefone }}</td>
             <td>{{ contato.email }}</td>
-            <td><button @click="removerContato(contatoEdit)">Remover</button></td>
+            <td><button @click="removerContato(pessoaList, pessoaEdit, contatoEdit)">Remover</button></td>
+            <td><button @click="editarContato(contato)">Editar</button></td>
         </tr>
     </table>
-
-    <br><br>
-    <button @click="() => { pessoaList.criarPessoa(pessoaEdit, contatosEdit); cleanDataPessoa(); }">Salvar Pessoa</button>  
 </template>
 
 <style scoped>
