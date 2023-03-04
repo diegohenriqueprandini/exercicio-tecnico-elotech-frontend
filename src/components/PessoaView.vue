@@ -7,14 +7,19 @@ import PessoaComponent from './PessoaComponent.vue';
 
 const pessoaGateway = inject("pessoaGateway") as PessoaGateway;
 
-const data: any = reactive({ pessoaList: new PessoaList([]) });
+const data: any = reactive({ pessoaList: new PessoaList() });
+
+async function carregar() {
+    const pessoas = await pessoaGateway.listar();
+    data.pessoaList.items = pessoas;
+}
 
 onMounted(async () => {
-    const pessoas = await pessoaGateway.listar();
-    data.pessoaList = new PessoaList(pessoas);
+    await carregar();
 
     data.pessoaList.register("criarPessoa", async (pessoa: Pessoa) => {
         await pessoaGateway.criar(pessoa);
+        await carregar();
     });
 
     data.pessoaList.register("alterarPessoa", async (pessoa: Pessoa) => {

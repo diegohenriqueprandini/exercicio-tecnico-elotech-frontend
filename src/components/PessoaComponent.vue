@@ -18,14 +18,14 @@ function cleanDataContato() {
 
 </script>
 
-<template>    
+<template>
     <table>
         <tr>
             <td>Nome</td>
             <td>Cpf</td>
             <td>Data de Nascimento</td>
             <td></td>
-        </tr>
+        </tr>        
         <tr v-for="pessoa in pessoaList.items">
             <td>{{ pessoa.nome }}</td>
             <td>{{ pessoa.cpf }}</td>

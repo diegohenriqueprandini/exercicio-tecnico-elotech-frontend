@@ -4,19 +4,17 @@ import Observable from './Observable';
 
 export default class PessoaList extends Observable {
 
-    constructor(
-        readonly items: Pessoa[]
-    ) {
-        super();
-    }
+    items: Pessoa[] = []
 
     async adicionarPessoa(pessoa: Pessoa) {
         this.items.push(pessoa)
-        super.notify("criarPessoa", pessoa);
+        super.notify("criarPessoa", pessoa);        
     }
 
     async removerPessoa(pessoa: Pessoa) {
-        this.items.splice(this.items.indexOf(pessoa), 1);
+        const found = this.items.find((item) => item.id == pessoa.id);
+        if (found == null) return;
+        this.items.splice(this.items.indexOf(found), 1);
         super.notify("removerPessoa", pessoa);
     }
 
