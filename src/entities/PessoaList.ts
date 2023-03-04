@@ -6,7 +6,8 @@ export default class PessoaList extends Observable {
 
     items: Pessoa[] = []
 
-    async adicionarPessoa(pessoa: Pessoa) {
+    async criarPessoa(pessoa: Pessoa, contatos: Contato[]) {
+        pessoa.contatos = contatos
         this.items.push(pessoa)
         super.notify("criarPessoa", pessoa);        
     }
@@ -16,13 +17,5 @@ export default class PessoaList extends Observable {
         if (found == null) return;
         this.items.splice(this.items.indexOf(found), 1);
         super.notify("removerPessoa", pessoa);
-    }
-
-    async adicionarContato(pessoa: Pessoa, contato: Contato) {
-        pessoa.contatos.push(contato);
-    }
-
-    async removerContato(pessoa: Pessoa, contato: Contato) {
-        pessoa.contatos.splice(pessoa.contatos.indexOf(contato), 1);
     }
 }

@@ -58,7 +58,7 @@ export default class PessoaHttpGateway implements PessoaGateway {
     async buscarContatosPessoa(pessoa: Pessoa): Promise<Contato[]> {
         const responseContatos = await this.httpClient.get(`${this.baseUrl}/pessoas/${pessoa.id}/contatos`)
         const contatos = responseContatos.contatos.map((item: any) => {
-            return new Pessoa(
+            return new Contato(
                 item.id,
                 item.nome,
                 item.telefone,

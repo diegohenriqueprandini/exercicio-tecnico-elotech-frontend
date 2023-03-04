@@ -8,12 +8,29 @@ defineProps(
 const pessoaEdit = ref(new Pessoa(null, "", "", ""));
 const contatoEdit = ref(new Contato(null, "", "", ""));
 
+const arr: Contato[] = [];
+const contatosEdit = ref(arr);
+
 function cleanDataPessoa() {
     pessoaEdit.value = new Pessoa(null, "", "", "");
 }
 
 function cleanDataContato() {
     contatoEdit.value = new Contato(null, "", "", "");
+}
+
+function editarPessoa(pessoa: Pessoa) {
+    console.log(pessoa.contatos);
+    pessoaEdit.value = pessoa;
+    contatosEdit.value = pessoa.contatos;
+}
+
+function adicionarContato(contato: Contato) {
+    contatosEdit.value.push(contato);
+}
+
+function removerContato(contato: Contato) {
+    contatosEdit.value.splice(contatosEdit.value.indexOf(contato), 1);
 }
 
 </script>
@@ -31,6 +48,7 @@ function cleanDataContato() {
             <td>{{ pessoa.cpf }}</td>
             <td>{{ pessoa.dataDeNascimento }}</td>
             <td><button @click="pessoaList.removerPessoa(pessoa)">Remover</button></td>
+            <td><button @click="editarPessoa(pessoa)">Editar</button></td>
         </tr>
     </table>
     <div v-if="pessoaList.items.length === 0">No items</div>
@@ -63,7 +81,7 @@ function cleanDataContato() {
         <label>E-mail</label>
         <input type="text" v-model="contatoEdit.email" />
     </div>    
-    <button @click="() => { pessoaList.adicionarContato(pessoaEdit, contatoEdit); cleanDataContato(); }">Adicionar Contato</button>  
+    <button @click="() => { adicionarContato(contatoEdit); cleanDataContato(); }">Adicionar Contato</button>  
     
     <br><br>
     
@@ -74,16 +92,16 @@ function cleanDataContato() {
             <td>E-mail</td>
             <td></td>
         </tr>
-        <tr v-for="contato in pessoaEdit.contatos">
+        <tr v-for="contato in contatosEdit">
             <td>{{ contato.nome }}</td>
             <td>{{ contato.telefone }}</td>
             <td>{{ contato.email }}</td>
-            <td><button @click="pessoaList.removerContato(pessoaEdit, contatoEdit)">Remover</button></td>
+            <td><button @click="removerContato(contatoEdit)">Remover</button></td>
         </tr>
     </table>
 
     <br><br>
-    <button @click="() => { pessoaList.adicionarPessoa(pessoaEdit); cleanDataPessoa(); }">Salvar Pessoa</button>  
+    <button @click="() => { pessoaList.criarPessoa(pessoaEdit, contatosEdit); cleanDataPessoa(); }">Salvar Pessoa</button>  
 </template>
 
 <style scoped>
